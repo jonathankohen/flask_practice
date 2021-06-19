@@ -14,6 +14,8 @@
     </head>
     <body>
         <div class="container my-5">
+            <a href="/logout">Logout</a>
+
             <h1 class="text-center mb-5">Users</h1>
 
             <table class="table mx-3">
@@ -40,7 +42,19 @@
                 </tbody>
             </table>
 
-            <form action="/create_user" method="post" class="m-5">
+            {% with messages = get_flashed_messages() %}
+            <!-- declare a variable called messages -->
+            {% if messages %}
+            <!-- check if there are any messages -->
+            {% for message in messages %}
+            <!-- loop through the messages -->
+            <p>{{message}}</p>
+            <!-- display each message in a paragraph tag -->
+            {% endfor %} {% endif %} {% endwith %}
+
+            <h1>Register</h1>
+
+            <form action="/register" method="post" class="m-5">
                 <div class="mb-3 row">
                     <div class="col">
                         <label for="first_name" class="form-label"
@@ -67,12 +81,8 @@
                     </div>
                 </div>
 
-                <div class="mb-3"></div>
-
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label"
-                        >Email address</label
-                    >
+                    <label for="email" class="form-label">Email address</label>
                     <input
                         type="email"
                         class="form-control"
@@ -86,9 +96,33 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label"
-                        >Password</label
-                    >
+                    <label for="password" class="form-label">Password</label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        name="password"
+                    />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+            <h1>Login</h1>
+
+            <form action="/login" method="post" class="m-5">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        name="email"
+                    />
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
                     <input
                         type="password"
                         class="form-control"

@@ -16,6 +16,11 @@
         <div class="container">
             <h1>Edit User {{user.id}}</h1>
 
+            <h3>Friends:</h3>
+            {% for friend in user.friends %}
+            <p>{{friend.nickname}}</p>
+            {% endfor %}
+
             <form action="/update_user/{{user.id}}" method="post" class="m-5">
                 <div class="mb-3 row">
                     <div class="col">
@@ -78,6 +83,23 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+            <form action="/user/add_friend/{{user.id}}" method="post">
+                <input type="hidden" name="user_id" value="{{user.id}}" />
+                <label for="nickname" class="form-label"
+                    >New friend's nickname</label
+                >
+                <input
+                    type="text"
+                    class="form-control"
+                    id="nickname"
+                    name="nickname"
+                    value="{{user.nickname}}"
+                />
+                <button type="submit" class="btn btn-primary">
+                    Add friend
+                </button>
             </form>
         </div>
     </body>
