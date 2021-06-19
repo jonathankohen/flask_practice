@@ -24,24 +24,41 @@ class User:
     def validate_reg(user):
         is_valid = True
 
-        user_email = user["email"]
-        query = f"SELECT * FROM users WHERE email = '{user_email}';"
-        result = connectToMySQL("users_practice").query_db(query)
-
-        if len(user["first_name"]) < 2 and str.isalpha(user["first_name"]):
+        if len(user["first_name"]) == 0:
+            flash("Please enter your first name.")
+            is_valid = False
+        elif len(user["first_name"]) < 2:
             flash("First name must be at least 3 characters.")
             is_valid = False
-        if len(user["last_name"]) < 2 and str.isalpha(user["last_name"]):
+        elif not str.isalpha(user["first_name"]):
+            flash("First name must contain only letters.")
+            is_valid = False
+
+        if len(user["last_name"]) == 0:
+            flash("Please enter your last name.")
+            is_valid = False
+        elif len(user["last_name"]) < 2 and str.isalpha(user["last_name"]):
             flash("Last name must be at least 3 characters.")
             is_valid = False
-        if not EMAIL_REGEX.match(user["email"]):
+        elif not str.isalpha(user["last_name"]):
+            flash("Last name must contain only letters.")
+            is_valid = False
+
+        if len(user["email"]) == 0:
+            flash("Please enter your email address.")
+            is_valid = False
+        elif not EMAIL_REGEX.match(user["email"]):
             flash("Invalid email address!")
             is_valid = False
-        if len(result) > 1:
-            flash("Email is already in database, please log in!")
+
+        if len(user["password"]) == 0:
+            flash("Please enter your password.")
             is_valid = False
-        if len(user["password"]) < 3:
-            flash("Password must be at least 3 characters.")
+        elif len(user["password"]) < 8:
+            flash("Password must be at least 8 characters.")
+            is_valid = False
+        elif user["password"] != user["c_pw"]:
+            flash("Passwords must match.")
             is_valid = False
         return is_valid
 
@@ -75,7 +92,7 @@ class User:
 
     @classmethod
     def update(cls, data):
-        query = "UPDATE users SET first_name = %(first_name)s, last_name = %(last_name)s, email = %(email)s, password = %(password)s WHERE id = %(id)s"
+        query = "UPDATE users SET first_name = %(first_name)s, last_name = %(last_name)s, email = %(email)s WHERE id = %(id)s"
         results = connectToMySQL("users_practice").query_db(query, data)
         return results
 

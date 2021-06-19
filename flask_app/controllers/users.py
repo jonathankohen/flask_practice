@@ -26,6 +26,11 @@ def register():
         "password": pw_hash,
     }
 
+    user_in_db = User.get_by_email(data)
+    if user_in_db:
+        flash("This email is already in our database. Please sign in!")
+        return redirect("/")
+
     user_id = User.save(data)
     session["user_id"] = user_id
     return redirect("/")
@@ -36,10 +41,10 @@ def login():
     data = {"email": request.form["email"]}
     user_in_db = User.get_by_email(data)
     if not user_in_db:
-        flash("Invalid credentials")
+        flash("Invalid credentials.")
         return redirect("/")
     if not bcrypt.check_password_hash(user_in_db.password, request.form["password"]):
-        flash("Invalid credentials")
+        flash("Invalid credentials.")
         return redirect("/")
     session["user_id"] = user_in_db.id
     print(session["user_id"])
@@ -72,7 +77,6 @@ def update_user(id):
         "first_name": request.form["first_name"],
         "last_name": request.form["last_name"],
         "email": request.form["email"],
-        "password": request.form["password"],
     }
     User.update(data)
     return redirect("/")
